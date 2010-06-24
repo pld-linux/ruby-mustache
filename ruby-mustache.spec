@@ -101,6 +101,13 @@ cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
 ruby setup.rb install \
     --prefix=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_mandir}/man{1,5}
+mv $RPM_BUILD_ROOT%{_mandir}/{,man1/}%{pkgname}.1
+mv $RPM_BUILD_ROOT%{_mandir}/{,man5/}%{pkgname}.5
+
+# Remove HTML and source markdown files
+rm $RPM_BUILD_ROOT%{_mandir}/*.*.*
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -113,6 +120,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -n mustache
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustache
+%{_mandir}/man1/%{pkgname}.1*
+%{_mandir}/man5/%{pkgname}.5*
 
 %files rdoc
 %defattr(644,root,root,755)
