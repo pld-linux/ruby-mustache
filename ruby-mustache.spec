@@ -6,7 +6,7 @@
 # - rm -r ri/Rack? (see XXX below)
 
 %define pkgname mustache
-Summary:	Logic-less templates.
+Summary:	Logic-less templates
 Name:		ruby-mustache
 Version:	0.11.2
 Release:	0.1
@@ -26,11 +26,25 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_enable_debug_packages	0
 
 %description
-Inspired by ctemplate and et, Mustache is a framework-agnostic way to render
-logic-free views.
+Inspired by ctemplate and et, Mustache is a framework-agnostic way to
+render logic-free views.
 
-As ctemplates says, "It emphasizes separating logic from presentation: it is
-impossible to embed application logic in this template language."
+As ctemplates says, "It emphasizes separating logic from presentation:
+it is impossible to embed application logic in this template
+language."
+
+%package -n mustache
+Summary:	Logic-less templates processor
+Group:		Applications/Publishing
+Requires:	%{name} = %{version}-%{release}
+
+%description -n mustache
+Inspired by ctemplate and et, Mustache is a framework-agnostic way to
+render logic-free views.
+
+As ctemplates says, "It emphasizes separating logic from presentation:
+it is impossible to embed application logic in this template
+language."
 
 %package rdoc
 Summary:	HTML documentation for %{pkgname}
@@ -57,13 +71,19 @@ ri documentation for %{pkgname}.
 Dokumentacji w formacie ri dla %{pkgname}.
 
 %prep
-%setup -c
+%setup -q -c
 mv defunkt-mustache-*/* .
 rm -rf defunkt-mustache-*
 
 %build
 
-cp /usr/share/setup.rb .
+cp %{_datadir}/setup.rb .
+
+ruby setup.rb config \
+	--rbdir=%{ruby_rubylibdir} \
+	--sodir=%{ruby_archdir}
+
+ruby setup.rb setup
 
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
@@ -75,9 +95,11 @@ rm ri/created.rid
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir}}
 
-cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+
+ruby setup.rb install \
+    --prefix=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,6 +109,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc CONTRIBUTORS HISTORY.md README.md
 %{ruby_rubylibdir}/%{pkgname}.rb
 %{ruby_rubylibdir}/%{pkgname}
+
+%files -n mustache
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mustache
 
 %files rdoc
 %defattr(644,root,root,755)
