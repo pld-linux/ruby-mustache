@@ -6,9 +6,9 @@
 
 %define pkgname mustache
 Summary:	Logic-less templates
-Name:		ruby-mustache
+Name:		ruby-%{pkgname}
 Version:	0.11.2
-Release:	1
+Release:	2
 License:	MIT
 Source0:	http://github.com/defunkt/mustache/tarball/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	fc6e868cf09d40eaf36ffabaf1f412c4
@@ -71,6 +71,12 @@ mv defunkt-mustache-*/* .
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
+# make gemspec self-contained
+ruby -r rubygems -e 'spec = eval(File.read("%{pkgname}.gemspec"))
+	File.open("%{pkgname}-%{version}.gemspec", "w") do |file|
+	file.puts spec.to_ruby_for_cache
+end'
+
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
 rm -r ri/Object
@@ -80,12 +86,13 @@ rm ri/cache.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man{1,5},%{ruby_ridir},%{ruby_rdocdir}}
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{ruby_specdir},%{_bindir},%{_mandir}/man{1,5},%{ruby_ridir},%{ruby_rdocdir}}
 
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+cp -p %{pkgname}-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
 
 install -d $RPM_BUILD_ROOT
 cp -a man/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
@@ -99,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc CONTRIBUTORS HISTORY.md README.md
 %{ruby_vendorlibdir}/mustache.rb
 %{ruby_vendorlibdir}/mustache
+%{ruby_specdir}/%{pkgname}-%{version}.gemspec
 
 %if 0
 # not packaging, don't want to pull rack as dep
