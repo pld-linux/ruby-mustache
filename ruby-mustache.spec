@@ -6,14 +6,15 @@
 
 %define pkgname mustache
 Summary:	Logic-less templates
+Summary(pl.UTF-8):	Szablony bez logiki
 Name:		ruby-%{pkgname}
-Version:	0.11.2
-Release:	2
+Version:	1.0.2
+Release:	1
 License:	MIT
-Source0:	http://github.com/defunkt/mustache/tarball/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	fc6e868cf09d40eaf36ffabaf1f412c4
+Source0:	https://github.com/mustache/mustache/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	bf80a5f73595e748a42235734138ee12
 Group:		Development/Languages
-URL:		http://mustache.github.com/
+URL:		http://mustache.github.io/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.665
 BuildArch:	noarch
@@ -27,8 +28,16 @@ As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template
 language."
 
+%description -l pl.UTF-8
+Mustache to zainspirowany przez ctemplate oraz et, niezależny od
+szkieletu sposób renderowania widoków bez logiki.
+
+Podobnie jak ctemplate, "podkreśla oddzielenie logiki od prezentacji;
+niemożliwe jest osadzenie logiki aplikacji w tym języku szablonów".
+
 %package -n mustache
 Summary:	Logic-less templates processor
+Summary(pl.UTF-8):	Procesor szablonów bez logiki
 Group:		Applications/Publishing
 Requires:	%{name} = %{version}-%{release}
 
@@ -40,9 +49,16 @@ As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template
 language."
 
+%description -n mustache -l pl.UTF-8
+Mustache to zainspirowany przez ctemplate oraz et, niezależny od
+szkieletu sposób renderowania widoków bez logiki.
+
+Podobnie jak ctemplate, "podkreśla oddzielenie logiki od prezentacji;
+niemożliwe jest osadzenie logiki aplikacji w tym języku szablonów".
+
 %package rdoc
 Summary:	HTML documentation for %{pkgname}
-Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla %{pkgname}
+Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla pakietu %{pkgname}
 Group:		Documentation
 Requires:	ruby >= 1:1.8.7-4
 
@@ -50,11 +66,11 @@ Requires:	ruby >= 1:1.8.7-4
 HTML documentation for %{pkgname}.
 
 %description rdoc -l pl.UTF-8
-Dokumentacja w formacie HTML dla %{pkgname}.
+Dokumentacja w formacie HTML dla pakietu %{pkgname}.
 
 %package ri
 Summary:	ri documentation for %{pkgname}
-Summary(pl.UTF-8):	Dokumentacja w formacie ri dla %{pkgname}
+Summary(pl.UTF-8):	Dokumentacja w formacie ri dla pakietu %{pkgname}
 Group:		Documentation
 Requires:	ruby
 
@@ -62,11 +78,10 @@ Requires:	ruby
 ri documentation for %{pkgname}.
 
 %description ri -l pl.UTF-8
-Dokumentacji w formacie ri dla %{pkgname}.
+Dokumentacji w formacie ri dla pakietu %{pkgname}.
 
 %prep
-%setup -qc
-mv defunkt-mustache-*/* .
+%setup -q -n mustache-%{version}
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
@@ -79,10 +94,8 @@ end'
 
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-rm -r ri/Object
-rm -r ri/lib/rack
-rm ri/created.rid
-rm ri/cache.ri
+%{__rm} ri/created.rid
+%{__rm} ri/cache.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -103,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CONTRIBUTORS HISTORY.md README.md
+%doc HISTORY.md LICENSE README.md
 %{ruby_vendorlibdir}/mustache.rb
 %{ruby_vendorlibdir}/mustache
 %{ruby_specdir}/%{pkgname}-%{version}.gemspec
@@ -117,8 +130,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -n mustache
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustache
-%{_mandir}/man1/%{pkgname}.1*
-%{_mandir}/man5/%{pkgname}.5*
+%{_mandir}/man1/mustache.1*
+%{_mandir}/man5/mustache.5*
 
 %files rdoc
 %defattr(644,root,root,755)
@@ -127,4 +140,3 @@ rm -rf $RPM_BUILD_ROOT
 %files ri
 %defattr(644,root,root,755)
 %{ruby_ridir}/Mustache
-%{ruby_ridir}/Rack
