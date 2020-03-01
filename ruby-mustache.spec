@@ -1,22 +1,19 @@
-# TODO:
-# - warning: Installed (but unpackaged) file(s) found:
-#   /usr/lib/ruby/1.9/rack/bug/panels/mustache_panel.rb
-#   /usr/lib/ruby/1.9/rack/bug/panels/mustache_panel/mustache_extension.rb
-#   /usr/lib/ruby/1.9/rack/bug/panels/mustache_panel/view.mustache
-
 %define pkgname mustache
 Summary:	Logic-less templates
 Summary(pl.UTF-8):	Szablony bez logiki
 Name:		ruby-%{pkgname}
-Version:	1.0.2
+Version:	1.1.1
 Release:	1
 License:	MIT
+#Source0Download: https://github.com/mustache/mustache/releases
 Source0:	https://github.com/mustache/mustache/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	bf80a5f73595e748a42235734138ee12
+# Source0-md5:	73be40dd1b7a1fefe06dbf94845aac01
 Group:		Development/Languages
 URL:		http://mustache.github.io/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.665
+BuildRequires:	ruby >= 1:2.0
+BuildRequires:	ruby-rdoc >= 4.1
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -60,7 +57,7 @@ niemożliwe jest osadzenie logiki aplikacji w tym języku szablonów".
 Summary:	HTML documentation for %{pkgname}
 Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla pakietu %{pkgname}
 Group:		Documentation
-Requires:	ruby >= 1:1.8.7-4
+Requires:	ruby >= 1:2.0
 
 %description rdoc
 HTML documentation for %{pkgname}.
@@ -72,7 +69,7 @@ Dokumentacja w formacie HTML dla pakietu %{pkgname}.
 Summary:	ri documentation for %{pkgname}
 Summary(pl.UTF-8):	Dokumentacja w formacie ri dla pakietu %{pkgname}
 Group:		Documentation
-Requires:	ruby
+Requires:	ruby >= 1:2.0
 
 %description ri
 ri documentation for %{pkgname}.
@@ -120,12 +117,6 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_vendorlibdir}/mustache.rb
 %{ruby_vendorlibdir}/mustache
 %{ruby_specdir}/%{pkgname}-%{version}.gemspec
-
-%if 0
-# not packaging, don't want to pull rack as dep
-%{ruby_vendorlibdir}/rack/bug/panels/mustache_panel.rb
-%{ruby_vendorlibdir}/rack/bug/panels/mustache_panel
-%endif
 
 %files -n mustache
 %defattr(644,root,root,755)
