@@ -3,7 +3,7 @@ Summary:	Logic-less templates
 Summary(pl.UTF-8):	Szablony bez logiki
 Name:		ruby-%{pkgname}
 Version:	1.1.1
-Release:	1
+Release:	2
 License:	MIT
 #Source0Download: https://github.com/mustache/mustache/releases
 Source0:	https://github.com/mustache/mustache/archive/v%{version}/%{name}-%{version}.tar.gz
