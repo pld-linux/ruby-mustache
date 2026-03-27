@@ -2,12 +2,13 @@
 Summary:	Logic-less templates
 Summary(pl.UTF-8):	Szablony bez logiki
 Name:		ruby-%{pkgname}
-Version:	1.1.1
-Release:	2
+Version:	1.1.2
+Release:	1
 License:	MIT
 #Source0Download: https://github.com/mustache/mustache/releases
 Source0:	https://github.com/mustache/mustache/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	73be40dd1b7a1fefe06dbf94845aac01
+# Source0-md5:	79dbdade40f91a8c8541aa9a1f1bd608
+Patch0:		%{name}-shebang.patch
 Group:		Development/Languages
 URL:		http://mustache.github.io/
 BuildRequires:	rpm-rubyprov
@@ -79,8 +80,7 @@ Dokumentacji w formacie ri dla pakietu %{pkgname}.
 
 %prep
 %setup -q -n mustache-%{version}
-
-%{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
+%patch -P0 -p1
 
 %build
 # make gemspec self-contained

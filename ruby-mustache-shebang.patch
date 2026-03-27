@@ -1,0 +1,8 @@
+--- mustache-1.1.2/bin/mustache.orig	2024-01-01 00:00:00.000000000 +0000
++++ mustache-1.1.2/bin/mustache	2024-01-01 00:00:00.000000000 +0000
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env ruby
++#!/usr/bin/ruby
+
+ require 'yaml'
+ require 'optparse'
